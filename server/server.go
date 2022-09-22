@@ -1,8 +1,10 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net"
+	"time"
 )
 
 func receiveTCPConn(ln *net.TCPListener) {
@@ -12,6 +14,17 @@ func receiveTCPConn(ln *net.TCPListener) {
 			log.Fatal(err)
 		}
 		log.Println(conn)
+	}
+}
+
+func clientResponseHandler(conn *net.TCPConn) {
+	defer conn.Close()
+	for {
+		_, err := io.WriteString(conn, "Server Response")
+		if err != nil {
+			return
+		}
+		time.Sleep(time.Second)
 	}
 }
 
